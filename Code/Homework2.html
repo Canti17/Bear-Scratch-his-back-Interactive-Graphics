@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    body {
+        background-color: #3a4e6e;
+        color: white;
+    }
+    #canvas-container{
+        float: left;
+        width: 80%;
+    }
+    #menu-container{
+        float: right;
+        background-color: #3a4e6e;
+        width: 20%;
+        margin-top: 20px;
+
+    }
+
+
+    button {
+        background-color: #d3d3d3;
+        color: #000000;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border: 2px solid #67c371;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+
+    button:hover {
+        background-color: #67c371;
+        color: white;
+    }
+
+    label{
+        color: #67c371;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        width: 80%;
+        height: 10px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+
+    }
+
+    .slider:hover {
+        background-color: #67c371;
+    }
+
+
+</style>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+in vec2 vTexCoord;
+out vec2 fTexCoord;
+
+void main()
+{
+    fTexCoord = vTexCoord;
+    gl_Position = projectionMatrix * modelViewMatrix * aPosition;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+#version 300 es
+
+precision mediump float;
+
+uniform sampler2D Tex0;
+uniform sampler2D Tex1;
+uniform sampler2D Tex2;
+uniform sampler2D Tex3;
+in vec2 fTexCoord;
+
+uniform bool head;
+uniform bool log;
+uniform bool branch;
+uniform bool lower;
+
+out vec4 fColor;
+
+void main()
+{
+  if(head){
+    fColor = vec4(1.0, 1.0, 1.0, 1.0)*(texture(Tex1, fTexCoord));
+  }
+
+  else if (log){
+    fColor = vec4(1.0, 1.0, 1.0, 1.0)*(texture(Tex2, fTexCoord));
+
+  }
+  else if(branch){
+    fColor = vec4(1.0, 1.0, 1.0, 1.0)*(texture(Tex3, fTexCoord));
+  }
+
+  else{
+
+    fColor = vec4(1.0, 1.0, 1.0, 1.0)*(texture(Tex0, fTexCoord));
+  }
+
+}
+</script>
+
+<script type="text/javascript" src="../Common/InitShaders.js"></script>
+<script type="text/javascript" src="../Common/MVnew.js"></script>
+<script type="text/javascript" src="Homework2.js"></script>
+
+<body>
+  <div id="canvas-container">
+<canvas id="gl-canvas" width="1024" height="1024">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+</div>
+
+</body>
+
+
+<div id="menu-container">
+<p>Change Theta: <label  id="labelTheta">Starting Point</label></p>
+<input id="thetaSlider" class = "slider" type="range" min="0" max="380" step="2" value="256" />
+<p> </p>
+
+<button id = "change">Change Perspective</button></p>
+<button id = "start">Start Animation</button></p>
+<br><p> </p>
+
+</div>
+
+
+</html>
